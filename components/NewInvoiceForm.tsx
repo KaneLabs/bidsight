@@ -54,16 +54,9 @@ export const NewInvoiceForm = () => {
     const nextId = invoices.length + persistedInvoices.length + 1;
     const nextInvoice = { id: nextId, ...draftInvoice };
 
-    const combinedInvoices = [
-      ...invoices,
-      ...persistedInvoices,
-      nextInvoice,
-    ].sort((a, b) => a.id - b.id);
-    setInvoices(combinedInvoices);
-
     localStorage.setItem(
       "persisted_invoices",
-      JSON.stringify([...persistedInvoices, { id: nextId, ...draftInvoice }])
+      JSON.stringify([...persistedInvoices, nextInvoice])
     );
     setDraftInvoice(initialDraft);
     push("/");
