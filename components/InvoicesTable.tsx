@@ -60,21 +60,24 @@ export const InvoicesTable = () => {
   const { invoices, fetchInvoices, error, isLoading } = useInvoicesCtx();
 
   useEffect(() => {
-    console.log("fetching invoices");
     fetchInvoices();
-  }, []);
-
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>{error.message}</div>;
+  }, [fetchInvoices]);
 
   const combinedInvoices = useMemo(() => {
-    const persistedInvoices = selectPersistedInvoice();
-    return [...invoices, ...persistedInvoices].sort((a, b) =>a.id - b.id);
+    try {
+      if (window) {
+        const persistedInvoices = selectPersistedInvoice();
+        return [...invoices, ...persistedInvoices].sort((a, b) => a.id - b.id);
+      }
+      return invoices;
+    } catch (error) {
+      return invoices;
+    }
   }, [invoices]);
 
   return (
     <Card className="max-w-6xl mx-auto w-full">
-      <div className="flex w-full justify-between" >
+      <div className="flex w-full justify-between">
         <Title>{isLoading ? "Loading Invoices" : "Invoices"}</Title>
         <CreateInvoiceButton />
       </div>

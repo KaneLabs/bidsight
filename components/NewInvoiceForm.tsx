@@ -1,8 +1,3 @@
-import {
-  StatusOnlineIcon,
-  CheckIcon,
-  PencilIcon,
-} from "@heroicons/react/outline";
 import { Button, Card, Title } from "@tremor/react";
 
 import { Invoice, useInvoicesCtx } from "../state/InvoicesProvider";
@@ -61,8 +56,6 @@ export const NewInvoiceForm = () => {
     setDraftInvoice(initialDraft);
     push("/");
   };
-
-  console.log("invoices", invoices);
 
   return (
     <Card className="max-w-6xl mx-auto w-full">
