@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react";
 
 // Define the invoice type
-type Invoice = {
+export type Invoice = {
   id: number;
   name: string;
   status: string;
@@ -9,7 +9,7 @@ type Invoice = {
   charges: InvoiceCharge[];
 };
 
-type InvoiceCharge = Record<string, string>;
+export type InvoiceCharge = Record<string, string>;
 
 // Define the initial state for the invoices array
 const initialInvoices: Invoice[] = [];
