@@ -1,4 +1,8 @@
-import { StatusOnlineIcon, CheckIcon, PencilIcon } from "@heroicons/react/outline";
+import {
+  StatusOnlineIcon,
+  CheckIcon,
+  PencilIcon,
+} from "@heroicons/react/outline";
 import {
   Card,
   Table,
@@ -11,9 +15,11 @@ import {
   Title,
   Badge,
 } from "@tremor/react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { InvoiceCharge, useInvoicesCtx } from "../state/InvoicesProvider";
+import { CreateInvoiceButton } from "./CreateInvoiceButton";
+import { selectPersistedInvoice } from "./NewInvoiceForm";
 
 export const getChargesTotalBaseCurrency = (charges: InvoiceCharge[]) => {
   const totalBaseCurrency = charges.reduce((total, curr) => {
@@ -50,7 +56,6 @@ const selectStatusIcon = (status: string) => {
   }
 };
 
-
 export const InvoicesTable = () => {
   const { invoices, fetchInvoices, error, isLoading } = useInvoicesCtx();
 
@@ -62,9 +67,17 @@ export const InvoicesTable = () => {
   // if (isLoading) return <div>Loading...</div>;
   // if (error) return <div>{error.message}</div>;
 
+  const combinedInvoices = useMemo(() => {
+    const persistedInvoices = selectPersistedInvoice();
+    return [...invoices, ...persistedInvoices].sort((a, b) =>a.id - b.id);
+  }, [invoices]);
+
   return (
     <Card className="max-w-6xl mx-auto w-full">
-      <Title>{isLoading ? "Loading Invoices" : "Invoices"}</Title>
+      <div className="flex w-full justify-between" >
+        <Title>{isLoading ? "Loading Invoices" : "Invoices"}</Title>
+        <CreateInvoiceButton />
+      </div>
       <Table className="mt-5">
         <TableHead>
           <TableRow>
@@ -76,7 +89,7 @@ export const InvoicesTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {invoices.map((invoice) => (
+          {combinedInvoices.map((invoice) => (
             <TableRow key={invoice.id}>
               <TableCell>{invoice.id}</TableCell>
               <TableCell>
